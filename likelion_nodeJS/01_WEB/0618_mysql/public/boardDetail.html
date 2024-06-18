@@ -1,0 +1,78 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>게시물 상세 페이지</title>
+    <link rel="stylesheet" href="/css/boardDetail.css">
+    <style>
+        @charset "UTF-8";
+/*!
+* Start Bootstrap - SB Admin v7.0.7 (https://startbootstrap.com/template/sb-admin)
+* Copyright 2013-2023 Start Bootstrap
+* Licensed under MIT (https://github.com/StartBootstrap/startbootstrap-sb-admin/blob/master/LICENSE)
+*/
+/*!
+ * Bootstrap  v5.2.3 (https://getbootstrap.com/)
+ * Copyright 2011-2022 The Bootstrap Authors
+ * Copyright 2011-2022 Twitter, Inc.
+ * Licensed under MIT (https://github.com/twbs/bootstrap/blob/main/LICENSE)
+ */
+ body {
+    font-family: Arial, sans-serif;
+    background-color: #f9f9f9;
+    margin: 0;
+    padding: 0;
+}
+
+.container {
+    max-width: 800px;
+    margin: 50px auto;
+    background-color: #fff;
+    padding: 20px;
+    box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+}
+
+h1 {
+    font-size: 2em;
+    margin-bottom: 20px;
+}
+
+.post-meta {
+    margin-bottom: 20px;
+    color: #777;
+}
+
+#post-content {
+    line-height: 1.6;
+    margin-bottom: 20px;
+}
+
+a {
+    display: inline-block;
+    margin-top: 20px;
+    color: #007BFF;
+    text-decoration: none;
+}
+
+a:hover {
+    text-decoration: underline;
+}
+
+    </style>
+</head>
+<body>
+    <div class="container">
+        <h1 id="post-title">게시물 제목</h1>
+        <div class="post-meta">
+            <span id="post-writer">작성자: 홍길동</span> | 
+            <span id="post-date">작성일: 2024-06-18</span>
+        </div>
+        <div id="post-content">
+            <p>여기에 게시물 본문 내용이 들어갑니다.</p>
+        </div>
+        <a href="/">목록으로 돌아가기</a>
+    </div>
+    <script src="/js/board.js"></script>
+</body>
+</html>

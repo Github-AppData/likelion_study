@@ -1,0 +1,15 @@
+{
+  "name": "0618_mysql",
+  "version": "1.0.0",
+  "main": "server.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "author": "",
+  "license": "ISC",
+  " npdescription": "",
+  "dependencies": {
+    "express": "^4.19.2",
+    "node-mysql": "^0.4.2"
+  }
+}
