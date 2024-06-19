@@ -41,7 +41,9 @@ app.get('/', (req, res) => {
     res.sendFile(__dirname + "/index.html");
 });
 
+// id 전역변수 설정
 let id = 0;
+
 app.get('/boardDetail/:id', (req, res) => {
     id = req.params.id;
     console.log(`Received ID: ${id}`); // 콘솔에 ID 출력
