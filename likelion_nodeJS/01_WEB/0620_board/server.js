@@ -7,7 +7,6 @@ const bodyParser = require('body-parser');
 app.use(bodyParser.urlencoded({extended:true})); // extended:true -> 객체안에 또 다른 객체 허용
 
 // EJS Configuration
-// app.set('views', path.join(__dirname, 'templates')); // views 폴더를 templates 폴더로 바꾸겠다.
 app.set('view engine', 'ejs');
 
 // MongoDB Configuration (MongoDB Altas)
@@ -124,8 +123,6 @@ app.get('/edit/:id', function(req,res) { // 요청에 맞는
             res.render('edit.ejs', {data:result});
             // res.status(200).send('Success');
         })
-
-    
 });
 
 app.post('/edit', (req,res) => { // 요청에 맞는 
