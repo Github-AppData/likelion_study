@@ -105,10 +105,12 @@ app.post("/save", (req, res) => {
         console.log("저장 완료", result);
 
         // 저장을 완료한 다음에, /board get으로 redirect
-        // res.redirect("/board");
+        res.redirect("/board");
         // res.send("데이터 추가 성공");
       });
   });
+
+
 
 
 app.get('/enter', function(req,res) { // 요청에 맞는 
