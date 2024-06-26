@@ -228,7 +228,6 @@ app.post('/signup', async(req,res) => {
   // 비밀번호 해쉬화
   const hashedPassword = await bcrypt.hash(req.body.userpw, saltRounds);
   
-  
   mydb.collection('account')
   .insertOne({
     userid: req.body.userid,
