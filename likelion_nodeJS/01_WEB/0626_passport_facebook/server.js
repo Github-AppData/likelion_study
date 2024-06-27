@@ -89,27 +89,9 @@ app.get("/book", function (req, res) {
   res.send("도서 목록 관련 페이지입니다.");
 });
 
-
-app.get("/list", function (req, res) {
-  // conn.query("select * from post", function (err, rows, fields) {
-  //   if (err) throw err;
-  //   console.log(rows);
-  // });
-
-  listen(req, res);
-});
-
-function listen(req, res){
-  mydb.collection('post').find().toArray().then(result => {
-    console.log(result);
-    res.render('list.ejs', { data : result });
-  })
-}
-
-// enter 요청에 대한 처리 루틴
-app.get('/enter', function(req, res){
-  res.render('enter.ejs');
-});
+// 미들웨어 설정 - 
+app.use("/", require("./routes/post"));
+app.use("/", require("./routes/account"));
 
 function dateNow(){
   var today = new Date();
@@ -122,27 +104,6 @@ function dateNow(){
 
   return dateString;
 }
-
-// save 요청에 대한 post 방식의 처리 루틴
-app.post('/save', function(req, res){
-  console.log(req.body.title);
-  console.log(req.body.content);
-
-  mydb.collection('post').insertOne(
-    {title : req.body.title, content : req.body.content, created : dateNow()})
-    .then(result => {
-        console.log(result);
-        console.log('데이터 추가 성공');
-        listen(req,res); 
-    });
-});
-
-  // revise Page - CSR (라우팅은 하지만, DB는 가지 않는...)
-  app.post("/revise", (req, res) => {
-    console.log(req.body);
-    res.render('revise.ejs', {data:req.body});
-
-  });
 
     // revise Page - CSR (라우팅은 하지만, DB는 가지 않는...)
     app.post("/update", (req, res) => {
@@ -165,19 +126,7 @@ app.post('/save', function(req, res){
       })
     });
 
-app.post("/delete", function (req, res) {
-  console.log(req.body);
-  req.body._id = new ObjId(req.body._id);
-  mydb.collection('post').deleteOne(req.body)
-  .then(result=>{
-    console.log('삭제완료');
-    res.status(200).send();
-  })
-  .catch(err =>{
-    console.log(err);
-    res.status(500).send();
-  });
-});
+
 
 app.get('/content/:id', (req,res) => {
   console.log(req.params.id);
@@ -194,12 +143,6 @@ app.get('/content/:id', (req,res) => {
     res.status(500).send();
   })
 })
-
-app.get("/signup", (req, res) => {
-  res.render("signup.ejs");
-})
-
-
 
 // id 체크
 // async function idCheck(reqUserId) {
@@ -234,27 +177,7 @@ async function verifyPassword(plainPassword, hash) {
   }
 }
 
-// signup
-app.post('/signup', async(req,res) => { 
 
-  console.log(req.body.userpw);
-
-  // 비밀번호 해쉬화
-  const hashedPassword = await bcrypt.hash(req.body.userpw, saltRounds);
-  
-  mydb.collection('account')
-  .insertOne({
-    userid: req.body.userid,
-    userpw: hashedPassword,
-    usergroup: req.body.usergroup,
-    useremail: req.body.useremail
-  }).then((result) => {
-    console.log("회원가입 성공입니다.")
-    // res.redirect("/"); -> redirect면 데이터를 못 가지고 간다.
-    res.render("index.ejs", {user : req.body}); // 
-  });
- 
-}) 
 
 // index.ejs
 app.get("/", function (req, res) {
@@ -268,17 +191,7 @@ app.get("/", function (req, res) {
   }
 });
 
-// login
-app.get('/login', (req,res) => {
 
-  // 세션에 유저가 있는가
-  if(req.session.user) {
-    console.log("이미 로그인 되어 있습니다.");
-    res.render("index.ejs", {user : req.session.user}); // 전달 해 준다.
-  } else {
-    res.render("login.ejs"); // 다시 로그인 해라
-  }
-})
 
 
 ///////// 내 DB에 있는 사용자 정보로 인증
@@ -316,19 +229,6 @@ app.get('/login', (req,res) => {
 //   } )
 // })
 
-app.get("/logout", (req, res) => {
-  console.log("로그아웃");
-
-  // 세션 파괴 후 콜백에서 리디렉션
-  req.session.destroy((err) => {
-    if (err) {
-      console.error("세션 파괴 중 오류 발생:", err);
-      res.status(500).send("서버 오류로 로그아웃 실패");
-    } else {
-      res.redirect("/login");
-    }
-  });
-});
 
 app.get("/bank", (req, res) => {
   if (typeof req.session.user != 'undefined') {
