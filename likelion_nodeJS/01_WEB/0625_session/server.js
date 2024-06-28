@@ -114,7 +114,7 @@ app.post('/save', function(req, res){
   app.post("/revise", (req, res) => {
     console.log(req.body);
     res.render('revise.ejs', {data:req.body});
-
+cookieParser
   });
 
     // revise Page - CSR (라우팅은 하지만, DB는 가지 않는...)

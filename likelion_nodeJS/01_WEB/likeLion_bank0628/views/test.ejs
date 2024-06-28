@@ -1,0 +1,66 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Bank Website</title>
+    <!-- Bootstrap CSS -->
+    <link href="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css" rel="stylesheet">
+    <style>
+        body {
+            padding-top: 56px; /* Space for the fixed navbar */
+        }
+        .navbar-brand {
+            font-weight: bold;
+        }
+        .hero-section {
+            background: url('bank-hero.jpg') no-repeat center center;
+            background-size: cover;
+            height: 400px;
+            color: white;
+            text-align: center;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+        }
+        .hero-section h1 {
+            font-size: 3rem;
+            text-shadow: 2px 2px 4px rgba(0, 0, 0, 0.6);
+        }
+    </style>
+</head>
+<body>
+    <%- include('menu.html') %>
+
+    <!-- Hero Section -->
+    <div class="hero-section">
+        <h1>Welcome to MyBank</h1>
+    </div>
+
+    <!-- Main Content -->
+    <div class="container my-5">
+        <div class="row">
+            <div class="col-lg-4">
+                <h2>Asset Management</h2>
+                <p>Manage your assets with our expert guidance and support.</p>
+            </div>
+            <div class="col-lg-4">
+                <h2>Products</h2>
+                <p>Explore our wide range of banking products tailored to meet your needs.</p>
+            </div>
+            <div class="col-lg-4">
+                <h2>Login</h2>
+                <p>Access your account securely from anywhere at any time.</p>
+            </div>
+        </div>
+    </div>
+
+    <!-- Footer -->
+    <footer class="py-4 bg-dark text-white-50">
+        <div class="container text-center">
+            <small>&copy; 2024 MyBank. All Rights Reserved.</small>
+        </div>
+    </footer>
+
+</body>
+</html>

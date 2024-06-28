@@ -10,8 +10,8 @@ app.use(session({
     resave: false,
     saveUninitialized: false,
 }));
-app.use(bodyParser.urlencoded({extended:true}));
 
+app.use(bodyParser.urlencoded({extended:true}));
 
 const cookieParser = require("cookie-parser");
 app.use(cookieParser("암호화 키"));

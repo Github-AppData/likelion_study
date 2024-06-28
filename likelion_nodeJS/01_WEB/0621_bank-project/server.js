@@ -153,7 +153,7 @@ app.post("/edit-complete", (req, res) => {
       query,
       {
         $set: {
-          name: req.body.name,
+          namec_date: req.body.name,
           rent: req.body.rent,
           deposit: req.body.deposit,
           constructionYear: req.body.constructionYear,

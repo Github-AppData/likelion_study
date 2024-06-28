@@ -177,8 +177,6 @@ async function verifyPassword(plainPassword, hash) {
   }
 }
 
-
-
 // index.ejs
 app.get("/", function (req, res) {
 
