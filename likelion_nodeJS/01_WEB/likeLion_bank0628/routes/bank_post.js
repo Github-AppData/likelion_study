@@ -1,6 +1,13 @@
 const router = require("express").Router();
 const setup = require("../db_setup");
 const mongoose = require("mongoose");
+const path = require('path');
+
+
+// 
+const speakeasy = require('speakeasy');
+const qrcode = require('qrcode');
+
 
 function dateNow(){
     var today = new Date();
@@ -24,6 +31,56 @@ function dateNow(){
     }
   }
 
+//
+let auth_secret;
+
+// Secret Key 생성 - 1
+router.get("/qrcode", async (req,res) => {
+
+  // 여기서 google Authorizer를 쓴다.       
+   auth_secret = speakeasy.generateSecret({
+    name: "Authorizer-auth10"
+  });
+  console.log("auth_secret : ", auth_secret);
+
+  // 생성한 Secret Key를 기반으로 QR 코드 생성(URL) - 2
+  console.log("auth_secret.otpauth_url : ", auth_secret.otpauth_url);
+  qrcode.toDataURL(auth_secret.otpauth_url, function(err, data) {
+    if(err){
+      console.error('Error generating QR code:', err);
+      return res.status(500).send('Error generating QR code');
+    }
+      console.log("data : ", data);
+
+      const filePath = path.join(__dirname, '..', 'test-qrcode.html');
+      // res.sendFile(filePath);
+      res.render("test-qrcode.ejs", {qrcode_data: data});
+  });
+
+})
+
+
+router.post("/verify-auth", (req, res) => {
+
+  const code = req.body.code;
+  console.log("code : ", code);
+  // ajax를 통해 전달받은 데이터를 token에다가 넣어야 한다.
+  var verified = speakeasy.totp.verify({
+    secret: auth_secret.ascii,
+    encoding: 'ascii',
+    token: code
+  });
+
+  console.log("verified : ",verified);
+
+  if(verified){
+    res.json({ msg: 'Verification successful' });
+  } else {
+    res.status(400).json({ msg: 'Verification failed' });
+  }
+})
+
+
 router.post("/list/update", async(req, res) => {
     try {
         const { mongodb, ObjectId } = await setup();
@@ -31,16 +88,10 @@ router.post("/list/update", async(req, res) => {
         // session에 있는 정보와 
         mongodb.collection("user").findOne({userid: req.session.userid})
         .then(async(result) => {
-            console.log("req.session.userpw : ", req.session.userid);
-            console.log("req.session.userpw : ", req.session.userpw);
-                
+            res.redirect("/google-authorizer");
         }).catch((err) => {
             return res.status(401).send("Unauthorized: User not found");
         })
-
-       
-
-        
     } catch (error) {
         res.status(500).send(error);
         console.log("error:",error);

@@ -2,7 +2,14 @@ const setup = require("./db_setup");
 const express = require("express");
 const bodyParser = require("body-parser");
 
+
+// google 관리자 2차인증 config
+// module.exports = speakeasy;
+
+const qrcode = require('qrcode');
+
 const app = express();
+app.use(express.json());
 
 const session = require("express-session");
 app.use(session({

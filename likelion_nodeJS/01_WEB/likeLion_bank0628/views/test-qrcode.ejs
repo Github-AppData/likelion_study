@@ -1,0 +1,61 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Document</title>
+
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js" integrity="sha384-YvpcrYf0tY3lHB60NNkmXc5s9fDVZLESaAA55NDzOxhy9GkcIdslK1eN7N6jIeHz" crossorigin="anonymous"></script>
+</head>
+<body>
+    
+    <h1>qrcode 이미지 입니다.</h1>
+    <h3>찍은 다음에 다음 버튼을 누르세요</h3>
+    <img src="<%= qrcode_data %>">
+
+    <button onclick="show()">다음</button>
+
+
+    <span id="goVerify"></span>
+
+    <script src="https://code.jquery.com/jquery-3.5.1.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js" integrity="sha384-YvpcrYf0tY3lHB60NNkmXc5s9fDVZLESaAA55NDzOxhy9GkcIdslK1eN7N6jIeHz" crossorigin="anonymous"></script>
+    
+
+    <script>
+        function show(){
+            // 여기서 입력한 input과 버튼이 보여야 한다. - verify-auth post로 갈 버튼이
+            $('#goVerify').html(`
+                    <input type="text" id="verificationCode" placeholder="Enter verification code">
+                    <button onclick="verifyBtn()">Verify</button>
+            `);
+
+
+        }
+
+        function verifyBtn(){
+            const code = $('#verificationCode').val();
+            console.log("code : ", code);
+            $.ajax({
+                    type: 'POST',
+                    url: '/verify-auth',
+                    data: JSON.stringify({ code: code }),
+                    contentType: 'application/json',
+                    success: function(response) {
+                        alert(response.msg);
+                        // 필요한 경우 추가 작업 수행
+                    },
+                    error: function(xhr, status, error) {
+                        alert('Verification failed: ' + xhr.responseText);
+                        // 필요한 경우 추가 작업 수행
+                    }
+                });
+            
+        }
+
+        // ajax에서는 verify-auth - post로 가야한다.
+        // $.ajax()
+    </script>
+    
+</body>
+</html>
