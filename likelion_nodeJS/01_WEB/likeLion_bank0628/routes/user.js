@@ -74,7 +74,7 @@ router.post('/user/login',async(req,res)=>{
                console.log("req.session.userid : ", req.session.userid);
 
                res.cookie("uid", req.session.userid); // 브라우저에 표시될 userid 세션
-               res.render("test.ejs", {data:req.session.userid});
+               res.render("mainPage.ejs", {data:req.session.userid});
            }else {
             res.status(403).send("Unthorized");
            }
@@ -92,8 +92,8 @@ router.get('/user/logout',(req,res)=>{
           console.error("세션 파괴 중 오류 발생:", err);
           return res.status(500).send("서버 오류로 로그아웃 실패");
         } else {
-        //   res.render("index.ejs");
-            res.send("/user/logout");
+          res.render("mainPage.ejs");
+            // res.send("/user/logout");
         }
       });
 });

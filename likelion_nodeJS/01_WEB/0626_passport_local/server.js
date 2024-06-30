@@ -206,7 +206,7 @@ app.post('/save', function(req, res){
           content: req.body.content,
           created: dateNow()
         }
-      }).then((res) => {
+      }).then((resut) => {
         // res.redirect('/list');
         listen(req, res); // forward랑 똑같다. - 단지 방식이 틀렸다.
       }).catch((err) => {

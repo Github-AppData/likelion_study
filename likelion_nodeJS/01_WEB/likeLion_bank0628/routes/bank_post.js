@@ -7,6 +7,7 @@ const path = require('path');
 // 
 const speakeasy = require('speakeasy');
 const qrcode = require('qrcode');
+const { title } = require("process");
 
 
 function dateNow(){
@@ -31,34 +32,39 @@ function dateNow(){
     }
   }
 
-//
-let auth_secret;
 
-// Secret Key 생성 - 1
-router.get("/qrcode", async (req,res) => {
 
-  // 여기서 google Authorizer를 쓴다.       
-   auth_secret = speakeasy.generateSecret({
-    name: "Authorizer-auth10"
-  });
-  console.log("auth_secret : ", auth_secret);
 
-  // 생성한 Secret Key를 기반으로 QR 코드 생성(URL) - 2
-  console.log("auth_secret.otpauth_url : ", auth_secret.otpauth_url);
-  qrcode.toDataURL(auth_secret.otpauth_url, function(err, data) {
-    if(err){
-      console.error('Error generating QR code:', err);
-      return res.status(500).send('Error generating QR code');
-    }
-      console.log("data : ", data);
+// 관리자 계정 생성 및 Secret Key 생성
+// router.get("/qrcode", async (req,res) => {
 
-      const filePath = path.join(__dirname, '..', 'test-qrcode.html');
-      // res.sendFile(filePath);
-      res.render("test-qrcode.ejs", {qrcode_data: data});
-  });
+//   // 여기서 google Authorizer를 쓴다.       
+//    auth_secret = speakeasy.generateSecret({
+//     name: "Authorizer-authReal"
+//   });
+//   console.log("auth_secret : ", auth_secret);
 
+//   // 생성한 Secret Key를 기반으로 QR 코드 생성(URL) - 2
+//   console.log("auth_secret.otpauth_url : ", auth_secret.otpauth_url);
+//   qrcode.toDataURL(auth_secret.otpauth_url, function(err, data) {
+//     if(err){
+//       console.error('Error generating QR code:', err);
+//       return res.status(500).send('Error generating QR code');
+//     }
+//       console.log("data : ", data);
+
+//       const filePath = path.join(__dirname, '..', 'test-qrcode.html');
+//       // res.sendFile(filePath);
+//       res.render("test-qrcode.ejs", {qrcode_data: data});
+//       // res.render("test-qrcode.ejs");
+//   });
+
+// })
+
+/** 관리자 2차 인증 url */
+router.get("/verify-auth", async (req,res) => {
+  res.render("test-qrcode.ejs");
 })
-
 
 router.post("/verify-auth", (req, res) => {
 
@@ -66,7 +72,7 @@ router.post("/verify-auth", (req, res) => {
   console.log("code : ", code);
   // ajax를 통해 전달받은 데이터를 token에다가 넣어야 한다.
   var verified = speakeasy.totp.verify({
-    secret: auth_secret.ascii,
+    secret: ".1z2BJKTIws1sgsUxwzaRu[3@?>tmo$@", // qrcode ascii를 요기다가 넣어주면 된다.
     encoding: 'ascii',
     token: code
   });
@@ -82,22 +88,34 @@ router.post("/verify-auth", (req, res) => {
 
 
 router.post("/list/update", async(req, res) => {
-    try {
-        const { mongodb, ObjectId } = await setup();
-        // 관리자만 수정 가능하게 만들어야 한다. - 차라리 관리자만 display할까
-        // session에 있는 정보와 
-        mongodb.collection("user").findOne({userid: req.session.userid})
-        .then(async(result) => {
-            res.redirect("/google-authorizer");
-        }).catch((err) => {
-            return res.status(401).send("Unauthorized: User not found");
-        })
-    } catch (error) {
-        res.status(500).send(error);
-        console.log("error:",error);
-        
-    }
-})
+    // 이미 인증이 다 된 상태이다 - 관리자 인증까지 다
+    // 그래서 updateOne만 해주면 된다.
+    const { mongodb, ObjectId } = await setup();
+    const objId = {_id: new ObjectId(req.body._id)};
+
+    mongodb.collection("bank_post").updateOne(objId, {
+        $set: {
+          title:req.body.title,
+          expiration:req.body.expiration,
+          interest:req.body.interest,
+          content:req.body.content,
+          c_date:dateNow(),
+        }
+      }).then((result) => {
+        // redirect는 모두 forward로 바꿔야 한다.
+        /**
+         * function listen(req, res){
+            mydb.collection('post').find().toArray().then(result => {
+              console.log(result);
+              res.render('list.ejs', { data : result });
+            })
+          }
+         */
+        res.redirect("/list");
+      }).catch((err) => {
+        console.log("err : ", err);
+      })
+});
 
 router.post("/list/delete", async(req, res) => {
     console.log("req.session.userpw : ", req.session.userpw);

@@ -36,11 +36,7 @@ app.set('view engine', 'ejs');
 
 
 app.get("/", async (req, res) => {
-    res.render("test.ejs");
-});
-
-app.get("/qrcode", async (req, res) => {
-    res.sendFile(__dirname+ "/test-qrcode.html");
+    res.render("mainPage.ejs");
 });
 
 
