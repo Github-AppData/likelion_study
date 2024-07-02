@@ -27,15 +27,24 @@ router.post("/post/photo", upload.single("picture"), (req, res) => {
 })
 
 router.get("/search",async (req, res) => {
-  console.log(req.query.value);
-  const { mongodb } = await setup();
+  if(req.session.user){
+    console.log(req.query.value);
+    const { mongodb } = await setup();
 
-  mongodb.collection("post")
-  .find({title: req.query.value}).toArray()
-  .then((result) => {
-    console.log("result : ", result);
-    res.render("post/sresult.ejs", {data:result});
-  })
+    mongodb.collection("post")
+    // 정규 표현식
+    .find({title: { $regex : new RegExp(req.query.value, "i")}}).toArray()
+    .then((result) => {
+      console.log("result : ", result);
+      res.render("post/sresult.ejs", {data:result});
+    }).catch((err) => {
+      // 서버오류
+      res.render("index.ejs");
+    })
+  } else {
+    // 실패
+    res.render("index.ejs");
+  }
 })
 
 ////로그인 된 사용자만 게시물 삭제해주기. 이때 자기글에 대해서만 삭제 가능하도록 해야함.
