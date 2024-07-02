@@ -32,8 +32,8 @@ const setup = async () => {
 
         return { mongodb, mysqldb };
     } catch (err) {
-        console.error("DB 접속 실패", err);   
-        throw err;
+        console.log("DB 접속 실패", err);   
+        // throw err;
     }
 };
 
